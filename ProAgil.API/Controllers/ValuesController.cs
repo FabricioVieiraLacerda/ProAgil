@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ProAgil.API.Data;
-using ProAgil.API.Model;
+
+using ProAgil.Repository;
 
 namespace ProAgil.API.Controllers
 {
@@ -14,9 +14,9 @@ namespace ProAgil.API.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        public readonly DataContext _context;
+        public readonly ProAgilDataContext _context;
         
-        public ValuesController(DataContext context)
+        public ValuesController(ProAgilDataContext context)
         {
             _context = context;
         }
@@ -31,10 +31,9 @@ namespace ProAgil.API.Controllers
                 return Ok(results);
             }
             catch (System.Exception)
-            {
-                
+            {                
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados falhou!");
-            }                        
+            }
         }
 
         // GET api/values/5
@@ -43,7 +42,7 @@ namespace ProAgil.API.Controllers
         {
             try
             {
-                var results = await _context.Eventos.FirstOrDefaultAsync(x => x.EventoId == id);
+                var results = await _context.Eventos.FirstOrDefaultAsync(x => x.Id == id);
                 return Ok(results);
             }
             catch (System.Exception)
